@@ -1,6 +1,13 @@
 package org.example;
 
 import com.github.britooo.looca.api.core.Looca;
+import com.github.britooo.looca.api.group.discos.DiscoGrupo;
+import com.github.britooo.looca.api.group.memoria.Memoria;
+import com.github.britooo.looca.api.group.processador.Processador;
+import com.github.britooo.looca.api.group.processos.ProcessoGrupo;
+import com.github.britooo.looca.api.group.servicos.ServicoGrupo;
+import com.github.britooo.looca.api.group.sistema.Sistema;
+import com.github.britooo.looca.api.group.temperatura.Temperatura;
 
 import java.util.*;
 import java.util.List;
@@ -21,7 +28,6 @@ public class TesteOfficeEye {
 
         //instância do looca para coletar dados
         Looca looca = new Looca();
-
 
         //escolha do tipo de login
         System.out.println(String.format("""

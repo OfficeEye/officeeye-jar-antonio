@@ -42,4 +42,5 @@ public class BdMySql {
         con.update("INSERT INTO registro (dataHora, informacaoRegistrada, tipoRegistro, fkEspecificacao, fkComponente, fkMaquina, fkFuncionario, fkEmpresa) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
                 dataHora, temperatura, tipoRegistroTemperaturaCpu, fkEspecificacaoComponenteProcessador, fkComponenteProcessador, fkMaquina, fkFuncionario, fkEmpresa);
     }
+
 }

@@ -9,6 +9,7 @@ import java.util.Scanner;
 import java.util.Timer;
 import java.util.TimerTask;
 import org.json.JSONObject;
+import org.springframework.jdbc.core.JdbcTemplate;
 
 public class AreaLoginFuncionarioGeral {
 
@@ -35,7 +36,7 @@ public class AreaLoginFuncionarioGeral {
         System.exit(0);
     }
 
-    public static void exibirAreaLogadaFuncionarioGeral(BdMySql mysql, BdSqlServer sqlserver, FuncionarioGeral funcionarioLogado, List<Maquina> maquinaFuncionario, Looca looca, boolean verificacaoLogin) {
+    public static void exibirAreaLogadaFuncionarioGeral(Conexao conexao, JdbcTemplate con, BdMySql mysql, BdSqlServer sqlserver, FuncionarioGeral funcionarioLogado, List<Maquina> maquinaFuncionario, Looca looca, boolean verificacaoLogin, String email) {
 
         System.out.println(String.format( """
                 \n
@@ -45,9 +46,13 @@ public class AreaLoginFuncionarioGeral {
                 * Aperte a tecla ENTER para parar o monitoramento e deslogar.
                 """.formatted(funcionarioLogado.getNome())));
 
-        // Perguntar ao usuário de quanto em quanto tempo deseja fazer o monitoramento
-        Scanner scanner = new Scanner(System.in);
-        System.out.println("""
+        String sql = "SELECT tempoColetaMilissegundos FROM funcionario WHERE email = ?";
+        Integer tempoColetaMilissegundos = con.queryForObject(sql, new Object[]{email}, Integer.class);
+        long delay = 30000;
+        if (tempoColetaMilissegundos == null) {
+            // Perguntar ao usuário de quanto em quanto tempo deseja fazer o monitoramento
+            Scanner scanner = new Scanner(System.in);
+            System.out.println("""
             ----------------------------------------------------------------
             Escolha o intervalo de tempo para o monitoramento:
             1. de 5 em 5 segundos
@@ -55,22 +60,25 @@ public class AreaLoginFuncionarioGeral {
             3. de 15 em 15 segundos
             4. de 20 em 20 segundos
             5. de 25 em 25 segundos
-            6. de 30 em 30 segundos
+            6. de 30 em 30 segundos(default)
             """);
-        int escolha = scanner.nextInt();
+            int escolha = scanner.nextInt();
 
-        long delay;
-        switch (escolha) {
-            case 1 -> delay = 5000;
-            case 2 -> delay = 10000;
-            case 3 -> delay = 15000;
-            case 4 -> delay = 20000;
-            case 5 -> delay = 25000;
-            case 6 -> delay = 30000;
-            default -> {
-                System.out.println("Opção inválida! Usando o intervalo padrão de 30 segundos.");
-                delay = 30000;
+            switch (escolha) {
+                case 1 -> delay = 5000;
+                case 2 -> delay = 10000;
+                case 3 -> delay = 15000;
+                case 4 -> delay = 20000;
+                case 5 -> delay = 25000;
+                case 6 -> delay = 30000;
+                default -> {
+                    System.out.println("Opção inválida! Usando o intervalo padrão de 30 segundos.");
+                    delay = 30000;
+                }
             }
+        } else {
+            delay = tempoColetaMilissegundos;
+            con.update("insert into funcionario (tempoColetaMilissegundos) values (?) where email = "+ email +";", delay);
         }
 
         sqlserver.atualizarStatusLogin(funcionarioLogado);

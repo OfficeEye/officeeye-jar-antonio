@@ -8,11 +8,13 @@ import com.github.britooo.looca.api.group.processos.ProcessoGrupo;
 import com.github.britooo.looca.api.group.servicos.ServicoGrupo;
 import com.github.britooo.looca.api.group.sistema.Sistema;
 import com.github.britooo.looca.api.group.temperatura.Temperatura;
+import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.util.*;
 import java.util.List;
 
 public class TesteOfficeEye {
+
     public static void main(String[] args) {
 
         //scanner para login
@@ -25,6 +27,10 @@ public class TesteOfficeEye {
         //instâncias dos bancos de dados
         BdMySql mysql = new BdMySql();
         BdSqlServer sqlserver = new BdSqlServer();
+
+        //instância da conexão com o banco local
+        Conexao conexao = new Conexao();
+        JdbcTemplate con = conexao.getConexaoDoBanco();
 
         //instância do looca para coletar dados
         Looca looca = new Looca();
@@ -67,7 +73,7 @@ public class TesteOfficeEye {
                 if (maquinaFuncionario.isEmpty()) {
                     AreaLoginFuncionarioGeral.mostrarMensagemErroMaquina();
                 } else {
-                    AreaLoginFuncionarioGeral.exibirAreaLogadaFuncionarioGeral(mysql, sqlserver, funcionarioLogado, maquinaFuncionario, looca, verificacaoLogin);
+                    AreaLoginFuncionarioGeral.exibirAreaLogadaFuncionarioGeral(conexao, con, mysql, sqlserver, funcionarioLogado, maquinaFuncionario, looca, verificacaoLogin, email);
                 }
             } else {
                 AreaLoginFuncionarioGeral.mostrarMensagemErroCredenciais();

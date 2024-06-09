@@ -31,7 +31,7 @@ public class Log {
         String dateTimeFormatted = dtf.format(dateTimeNow);
 
         // nome do arquivo que será gerado
-        String file = "OfficeEye-log-%s.log".formatted(dateFormatted);
+        String file = "%s-OfficeEye-log.log".formatted(dateFormatted);
 
         // verifica se o diretório já existe. Se não existir ainda, é criado
         if (!Files.exists(path)) {

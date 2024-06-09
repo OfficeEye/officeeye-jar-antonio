@@ -49,8 +49,8 @@ public class AreaLoginFuncionarioGeral {
         String sql = "SELECT tempoColetaMilissegundos FROM funcionario WHERE email = ?";
         Integer tempoColetaMilissegundos = con.queryForObject(sql, new Object[]{email}, Integer.class);
 
-        long period = 30000; // 10 segundos
-        long delay = 30000; // 10 segundos
+        long period = tempoColetaMilissegundos; // 10 segundos
+        long delay = tempoColetaMilissegundos; // 10 segundos
         if (tempoColetaMilissegundos == null) {
             // Perguntar ao usuário de quanto em quanto tempo deseja fazer o monitoramento
             Scanner scanner = new Scanner(System.in);
@@ -67,39 +67,20 @@ public class AreaLoginFuncionarioGeral {
             int escolha = scanner.nextInt();
 
             switch (escolha) {
-                case 1 -> {
-                    period = 5000;
-                    delay = 5000;
-                }
-                case 2 -> {
-                    period = 10000;
-                    delay = 10000;
-                }
-                case 3 -> {
-                    period = 15000;
-                    delay = 15000;
-                }
-                case 4 -> {
-                    period = 20000;
-                    delay = 20000;
-                }
-                case 5 -> {
-                    period = 25000;
-                    delay = 25000;
-                }
-                case 6 -> {
-                    period = 30000;
-                    delay = 30000;
-                }
+                case 1 -> period = 5000;
+                case 2 -> period = 10000;
+                case 3 -> period = 15000;
+                case 4 -> period = 20000;
+                case 5 -> period = 25000;
+                case 6 -> period = 30000;
                 default -> {
                     System.out.println("Opção inválida! Usando o intervalo padrão de 30 segundos.");
                     period = 30000;
-                    delay = 30000;
                 }
             }
-        } else {
-            period = tempoColetaMilissegundos;
-            con.update("insert into funcionario (tempoColetaMilissegundos) values (?) where email = "+ email +";", period);
+
+            String updateTime = "UPDATE funcionario SET tempoColetaMilissegundos = " + period + " WHERE email = '" + email + "';";
+            con.update(updateTime);
         }
 
         sqlserver.atualizarStatusLogin(funcionarioLogado);

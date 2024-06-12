@@ -36,7 +36,7 @@ public class AreaLoginFuncionarioGeral {
         System.exit(0);
     }
 
-    public static void exibirAreaLogadaFuncionarioGeral(Conexao conexao, JdbcTemplate con, BdMySql mysql, BdSqlServer sqlserver, FuncionarioGeral funcionarioLogado, List<Maquina> maquinaFuncionario, Looca looca, boolean verificacaoLogin, String email) {
+    public static void exibirAreaLogadaFuncionarioGeral(Conexao conexao, JdbcTemplate con, BdMySql mysql, BdSqlServer sqlserver, FuncionarioGeral funcionarioLogado, List<Maquina> maquinaFuncionario, Looca looca, boolean verificacaoLogin, String email) throws IOException {
 
         System.out.println(String.format( """
                 \n
@@ -49,8 +49,8 @@ public class AreaLoginFuncionarioGeral {
         String sql = "SELECT tempoColetaMilissegundos FROM funcionario WHERE email = ?";
         Integer tempoColetaMilissegundos = con.queryForObject(sql, new Object[]{email}, Integer.class);
 
-        long period = tempoColetaMilissegundos; // 10 segundos
-        long delay = tempoColetaMilissegundos; // 10 segundos
+        long period; // 10 segundos
+        long delay = 10000; // 10 segundos
         if (tempoColetaMilissegundos == null) {
             // Perguntar ao usuário de quanto em quanto tempo deseja fazer o monitoramento
             Scanner scanner = new Scanner(System.in);
@@ -79,9 +79,11 @@ public class AreaLoginFuncionarioGeral {
                 }
             }
 
-            String updateTime = "UPDATE funcionario SET tempoColetaMilissegundos = " + period + " WHERE email = '" + email + "';";
-            con.update(updateTime);
+            String updateTime = "UPDATE funcionario SET tempoColetaMilissegundos = " + period + " WHERE email = '" + email + ";";
+        }else {
+            period = tempoColetaMilissegundos;
         }
+        Log.generateLog("Tempo de coleta setado: "+ period/1000 +"s", "INFO");
 
         sqlserver.atualizarStatusLogin(funcionarioLogado);
 
@@ -144,9 +146,15 @@ public class AreaLoginFuncionarioGeral {
                     Double porcentagemEspacoLivre = (double) Math.round((espacoDisponivel / tamanhoTotal) * 100);
 
                     if (porcentagemEspacoLivre <= metricas.get(0).getPorcentagemCritico()) {
+                        try {
+                            Log.generateLog("Espaço do disco esta abaixo do ideal", "INFO", null);
+                        } catch (Exception e) {                        }
                         statusRegistroEspacoLivre = "Crítico";
                         enviarMensagemSlack("Alerta crítico 🚨 : " + hostname + " com espaço em disco abaixo de " + metricas.get(0).getPorcentagemCritico() + "%.");
                     } else if (porcentagemEspacoLivre <= metricas.get(0).getPorcentagemAlerta()) {
+                        try {
+                            Log.generateLog("Espaço do disco esta abaixo do ideal", "INFO", null);
+                        } catch (Exception e) {                    }
                         statusRegistroEspacoLivre = "Alerta";
                         enviarMensagemSlack("Alerta ❗ : " + hostname + " com espaço em disco abaixo de " + metricas.get(0).getPorcentagemAlerta() + "%.");
                     } else {
@@ -163,9 +171,15 @@ public class AreaLoginFuncionarioGeral {
                     Double porcentagemUsoMemoria = (double) Math.round((memoriaEmUso / memoriaTotal) * 100);
 
                     if (porcentagemUsoMemoria >= metricas.get(1).getPorcentagemCritico()) {
+                        try {
+                            Log.generateLog("Porcentagem de uso de memória esta acima do ideal", "INFO", null);
+                        } catch (Exception e) {                        }
                         statusRegistroMemoriaUso = "Crítico";
                         enviarMensagemSlack("Alerta crítico 🚨 : " + hostname + " com uso de memória acima de " + metricas.get(1).getPorcentagemCritico() + "%.");
                     } else if (porcentagemUsoMemoria >= metricas.get(1).getPorcentagemAlerta()) {
+                        try {
+                            Log.generateLog("Porcentagem de uso de memória esta acima do ideal", "INFO", null);
+                        } catch (Exception e) {                        }
                         statusRegistroMemoriaUso = "Alerta";
                         enviarMensagemSlack("Alerta ❗ : " + hostname + " com uso de memória acima de " + metricas.get(1).getPorcentagemAlerta() + "%.");
                     } else {
@@ -186,9 +200,15 @@ public class AreaLoginFuncionarioGeral {
                     String statusRegistroTemperaturaCpu = "";
 
                     if (usoProcessador >= metricas.get(2).getPorcentagemCritico()) {
+                        try {
+                            Log.generateLog("Porcentagem de uso do processador esta acima do ideal", "INFO", null);
+                        } catch (Exception e) {                        }
                         statusRegistroUsoProcessador = "Crítico";
                         enviarMensagemSlack("Alerta crítico 🚨 : " + hostname + " com uso de processador acima de " + metricas.get(2).getPorcentagemCritico() + "%.");
                     } else if (usoProcessador >= metricas.get(2).getPorcentagemAlerta()) {
+                        try {
+                            Log.generateLog("Porcentagem de uso do processador esta acima do ideal", "INFO", null);
+                        } catch (Exception e) {                        }
                         statusRegistroUsoProcessador = "Alerta";
                         enviarMensagemSlack("Alerta ❗ : " + hostname + " com uso de processador acima de " + metricas.get(2).getPorcentagemAlerta() + "%.");
                     } else {
@@ -196,9 +216,15 @@ public class AreaLoginFuncionarioGeral {
                     }
 
                     if (temperaturaCpu >= metricas.get(3).getPorcentagemCritico()) {
+                        try {
+                            Log.generateLog("Temperatura do processador esta acima do ideal", "INFO", null);
+                        } catch (Exception e) {                        }
                         statusRegistroTemperaturaCpu = "Crítico";
                         enviarMensagemSlack("Alerta crítico 🚨 : " + hostname + " com temperatura da CPU acima de " + metricas.get(3).getPorcentagemCritico() + "°C.");
                     } else if (temperaturaCpu >= metricas.get(3).getPorcentagemAlerta()) {
+                        try {
+                            Log.generateLog("Temperatura do processador esta acima do ideal", "INFO", null);
+                        } catch (Exception e) {                        }
                         statusRegistroTemperaturaCpu = "Alerta";
                         enviarMensagemSlack("Alerta ❗ : " + hostname + " com temperatura da CPU acima de " + metricas.get(3).getPorcentagemAlerta() + "°C.");
                     } else {

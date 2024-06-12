@@ -1,0 +1,22 @@
+[ 2024-06-12 14:03:14 INFO  org.example.TesteOfficeEye:76 - Funcionário logado com sucesso: maria.veigas@gmail.com ]
+
+[ 2024-06-12 14:05:06 INFO  org.example.TesteOfficeEye:76 - Funcionário logado com sucesso: maria.veigas@gmail.com ]
+
+[ 2024-06-12 14:07:10 INFO  org.example.TesteOfficeEye:76 - Funcionário logado com sucesso: maria.veigas@gmail.com ]
+
+[ 2024-06-12 14:11:26 INFO  org.example.AreaLoginFuncionarioGeral:86 - Tempo de coleta setado: 5 ]
+
+[ 2024-06-12 14:11:28 INFO  org.example.TesteOfficeEye:76 - Funcionário logado com sucesso: maria.veigas@gmail.com ]
+
+[ 2024-06-12 14:13:09 INFO  org.example.AreaLoginFuncionarioGeral:86 - Tempo de coleta setado: 5s ]
+
+[ 2024-06-12 14:13:11 INFO  org.example.TesteOfficeEye:76 - Funcionário logado com sucesso: maria.veigas@gmail.com ]
+
+[ 2024-06-12 14:23:06 INFO  org.example.TesteOfficeEye:75 - Funcionário logado com sucesso: maria.veigas@gmail.com ]
+
+[ 2024-06-12 14:23:06 INFO  org.example.AreaLoginFuncionarioGeral:86 - Tempo de coleta setado: 5s ]
+
+[ 2024-06-12 14:26:11 INFO  org.example.TesteOfficeEye:75 - Funcionário logado com sucesso: maria.veigas@gmail.com ]
+
+[ 2024-06-12 14:26:11 INFO  org.example.AreaLoginFuncionarioGeral:86 - Tempo de coleta setado: 5s ]
+

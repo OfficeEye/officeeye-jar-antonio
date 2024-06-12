@@ -10,12 +10,13 @@ import com.github.britooo.looca.api.group.sistema.Sistema;
 import com.github.britooo.looca.api.group.temperatura.Temperatura;
 import org.springframework.jdbc.core.JdbcTemplate;
 
+import java.io.IOException;
 import java.util.*;
 import java.util.List;
 
 public class TesteOfficeEye {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
 
         //scanner para login
         Scanner leitorLogin = new Scanner(System.in);
@@ -70,10 +71,11 @@ public class TesteOfficeEye {
                 List<Maquina> maquinaFuncionario = sqlserver.buscarMaquinaDoFuncionario();
                 FuncionarioGeral funcionarioLogado = sqlserver.buscarFuncionarioLogado();
 
-                if (maquinaFuncionario.isEmpty()) {
-                    AreaLoginFuncionarioGeral.mostrarMensagemErroMaquina();
-                } else {
+                try {
+                    Log.generateLog("Funcionário logado com sucesso: "+ email, "INFO");
                     AreaLoginFuncionarioGeral.exibirAreaLogadaFuncionarioGeral(conexao, con, mysql, sqlserver, funcionarioLogado, maquinaFuncionario, looca, verificacaoLogin, email);
+                } catch (Exception e) {
+                    Log.generateLog("Ocorreu um erro ao logar", "ERROR", e);
                 }
             } else {
                 AreaLoginFuncionarioGeral.mostrarMensagemErroCredenciais();
